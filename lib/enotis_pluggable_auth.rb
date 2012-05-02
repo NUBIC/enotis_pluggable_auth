@@ -13,13 +13,13 @@ module EnotisPluggableAuth
     @enotis_connection = Faraday.new(:url => CONFIG["host"])
   
     def get_user_by_username(username, level)
-      enotis_response = JSON.parse(Faraday.default_connection.get("#{CONFIG['host']}/users/#{username}.json").body, {:symbolize_names => true})
+      enotis_response = JSON.parse(Faraday.default_connection.get("#{CONFIG['users']}/#{username}.json").body, {:symbolize_names => true})
     
       build_authorization_hash(enotis_response)
     end
 
     def get_user_by_id(id, level)
-      enotis_response = JSON.parse(Faraday.default_connection.get("#{CONFIG['host']}/users/#{id}.json").body, {:symbolize_names => true})
+      enotis_response = JSON.parse(Faraday.default_connection.get("#{CONFIG['users']}/#{id}.json").body, {:symbolize_names => true})
     
       build_authorization_hash(enotis_response)
     end
@@ -27,7 +27,17 @@ module EnotisPluggableAuth
     def get_users_by_role(role_name)
       case role_name
       when "system-administrator"
+        enotis_list_of_admins = JSON.parse(Faraday.default_connection.get("#{CONFIG['admins']}.json").body, {:symbolize_names => true})
         
+          
+        authorization_array_response = []
+        enotis_list_of_admins.each do |admin|
+          authorization_array_response << build_authorization_hash(admin)
+        end
+        return authorization_array_response
+      else
+        return nil
+      end
     end
 
     def search_users(criteria)
