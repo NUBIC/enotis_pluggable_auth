@@ -1,29 +1,17 @@
 # EnotisPluggableAuth
 
-TODO: Write a gem description
+This gem provides pluggable auth functionality between PSC and eNOTIS.
 
-## Installation
+## Building
 
-Add this line to your application's Gemfile:
+This gem is intended to be built into a gemjar for deployment into a PSC instance. In order to build the gem, go to the root of this project and run the following commands:
 
-    gem 'enotis_pluggable_auth'
+`gem build enotis_pluggable_auth.gemspec`
+`buildr package`
 
-And then execute:
+The first command builds the gem. The second command builds the gemjar, and places inside the `target/` folder.
 
-    $ bundle
+## Modifying
 
-Or install it yourself as:
+If you want to modify how the gem talks to eNOTIS, modify the `lib/enotis_pluggable_auth.rb` file, and the corresponding tests in `spec/enotis_pluggable_auth_spec.rb`
 
-    $ gem install enotis_pluggable_auth
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
