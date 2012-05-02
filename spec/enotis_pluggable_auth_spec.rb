@@ -84,10 +84,12 @@ describe EnotisPluggableAuth::EnotisAuthority do
     $suite_authorization_source.get_users_by_role("some role, any role really").should be_nil
   end
   
-  it "should return an array of properly formatted hashes of admins when searching for users by the 'system-administrator' role" do 
+  it "should return an array of properly formatted hashes of admins when searching for users by the :system_administrator role" do 
     Faraday.default_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_all_admins))
-    
-    $suite_authorization_source.get_users_by_role("System Administrator").should == @psc_auth_array_for_all_admins
+    @psc_auth_array_for_all_admins.each do |auth_hash|
+      puts auth_hash[:roles].inspect
+    end
+    $suite_authorization_source.get_users_by_role(:system_administrator).should == @psc_auth_array_for_all_admins
   end
   
   it "should return nil when a search for users is submitted" do
