@@ -57,25 +57,25 @@ describe EnotisPluggableAuth::EnotisAuthority do
   end
   
   it "should return a properly formatted hash for an admin when requested by user id" do
-    Faraday.default_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_admin))
+    $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_admin))
 
     $suite_authorization_source.get_user_by_id(1, nil).should == @psc_auth_hash_for_admin
   end
   
   it "should return a properly formatted hash for an admin when requested by username" do
-    Faraday.default_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_admin))
+    $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_admin))
     
     $suite_authorization_source.get_user_by_username("adm123", nil).should == @psc_auth_hash_for_admin
   end
 
   it "should return a properly formatted hash for a user when requested by user id" do
-    Faraday.default_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_user))
+    $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_user))
     
     $suite_authorization_source.get_user_by_id(1, nil).should == @psc_auth_hash_for_user
   end
   
   it "should return a properly formatted hash for a user when requested by username" do
-    Faraday.default_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_user))
+    $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_user))
     
     $suite_authorization_source.get_user_by_username("usr123", nil).should == @psc_auth_hash_for_user
   end
@@ -85,7 +85,7 @@ describe EnotisPluggableAuth::EnotisAuthority do
   end
   
   it "should return an array of properly formatted hashes of admins when searching for users by the :system_administrator role" do 
-    Faraday.default_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_all_admins))
+    $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_all_admins))
 
     $suite_authorization_source.get_users_by_role(:system_administrator).should == @psc_auth_array_for_all_admins
   end
