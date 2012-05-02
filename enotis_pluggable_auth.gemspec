@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
   
   gem.add_dependency 'faraday', '~> 0.7.6'
   gem.add_dependency 'json', '~> 1.6.6'
+  gem.add_dependency 'jruby-openssl', '~> 0.7.6.1'
 
   gem.add_development_dependency 'rspec', '~> 2.9'
   gem.add_development_dependency 'rake', '~> 0.9.2'

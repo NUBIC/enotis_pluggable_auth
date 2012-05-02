@@ -5,7 +5,6 @@ require 'rubygems'
 require 'json'
 require 'faraday'
 
-
 module EnotisPluggableAuth
   class EnotisAuthority
     CONFIG = YAML.load_file("/etc/nubic/psc_enotis_pluggable_auth.yml")
