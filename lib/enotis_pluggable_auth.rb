@@ -26,7 +26,7 @@ module EnotisPluggableAuth
 
     def get_users_by_role(role_name)
       case role_name
-      when "system-administrator"
+      when "System Administrator"
         enotis_list_of_admins = JSON.parse(Faraday.default_connection.get("#{CONFIG['admins']}.json").body, {:symbolize_names => true})
         
           
