@@ -9,7 +9,7 @@ module EnotisPluggableAuth
   class EnotisAuthority
     CONFIG = YAML.load_file("/etc/nubic/psc_enotis_pluggable_auth.yml")
   
-    @enotis_connection = Faraday.new(:url => CONFIG["host"])
+    @enotis_connection = Faraday.new(:url => CONFIG["host"], :ssl => {:ca_path => CONFIG['ssl_ca_path']})
   
     def get_user_by_username(username, level)
       enotis_response = JSON.parse(Faraday.default_connection.get("#{CONFIG['users']}/#{username}.json").body, {:symbolize_names => true})
