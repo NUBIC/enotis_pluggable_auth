@@ -40,9 +40,7 @@ module EnotisPluggableAuth
     end
 
     def search_users(criteria)
-      # NOT implemented for eNOTIS
-      # This prevents any user management from within the PSC UI itself. eNOTIS is the gatekeeper of all information
-      #   regarding user access.
+      enotis_response = JSON.parse(Faraday.default_connection.get("#{CONFIG['users']}/search.json?#{criteria}").body, {:symbolize_names => true})
     end
   
     private
