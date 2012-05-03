@@ -91,7 +91,7 @@ describe EnotisPluggableAuth::EnotisAuthority do
   end
   
   it "should return nil when a search for users is submitted" do
-    $suite_authorization_source.search_users("whatever criteria you want to throw in here").should be_nil
+    $suite_authorization_source.search_users("some-criteria").should be_nil
   end
   
 end
