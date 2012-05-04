@@ -6,6 +6,8 @@ describe EnotisPluggableAuth::EnotisAuthority do
   $suite_authorization_source = EnotisPluggableAuth::EnotisAuthority.new
 
   before(:each) do
+    @enotis_faraday_connection = Faraday::Connection.new(:url => CONFIG["host"])
+    
     @enotis_response_for_admin = "{\"roles\":[\"admin\"],\"first_name\":\"Admin\",\"email\":\"admin@example.com\",\"netid\":\"adm123\",\"last_name\":\"Admin\",\"id\":1}"
     @enotis_response_for_all_admins = "[#{@enotis_response_for_admin}]"
     @psc_auth_hash_for_admin = {
@@ -85,13 +87,13 @@ describe EnotisPluggableAuth::EnotisAuthority do
   end
   
   it "should return an array of properly formatted hashes of admins when searching for users by the :system_administrator role" do 
-    $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_all_admins))
+    $suite_authorization_source.stub!(:enotis_faraday_connection).and_return(@enotis_faraday_connection)
 
     $suite_authorization_source.get_users_by_role(:system_administrator).should == @psc_auth_array_for_all_admins
   end
   
-  it "should return nil when a search for users is submitted" do
-    $suite_authorization_source.search_users("some-criteria").should be_nil
+  it "should return [] when a search for users is submitted" do
+    $suite_authorization_source.search_users("some-criteria").should == JSON.parse("[]")
   end
   
 end

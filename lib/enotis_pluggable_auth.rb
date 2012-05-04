@@ -41,7 +41,7 @@ module EnotisPluggableAuth
     end
 
     def search_users(criteria)
-      enotis_response = JSON.parse(enotis_faraday_connection.get("#{CONFIG['search']}?#{criteria}").body, {:symbolize_names => true})
+      return JSON.parse("[]")
     end
   
     private
