@@ -9,20 +9,18 @@ module EnotisPluggableAuth
   class EnotisAuthority
     CONFIG = YAML.load_file("/etc/nubic/psc_enotis_pluggable_auth.yml")
   
-    @@enotis_connection = Faraday::Connection.new(:url => CONFIG["host"], :ssl => {:ca_path => CONFIG['ssl_ca_path']})
-  
     def enotis_faraday_connection
-      return @@enotis_connection
+      Faraday::Connection.new(:url => CONFIG["host"], :ssl => {:ca_file => CONFIG['ca_file']})
     end
   
     def get_user_by_username(username, level)
-      enotis_response = JSON.parse(@@enotis_connection.get("#{CONFIG['users']}/#{username}.json").body, {:symbolize_names => true})
+      enotis_response = JSON.parse(enotis_faraday_connection.get("#{CONFIG['users']}/#{username}.json").body, {:symbolize_names => true})
     
       build_authorization_hash(enotis_response)
     end
 
     def get_user_by_id(id, level)
-      enotis_response = JSON.parse(@@enotis_connection.get("#{CONFIG['users']}/#{id}.json").body, {:symbolize_names => true})
+      enotis_response = JSON.parse(enotis_faraday_connection.get("#{CONFIG['users']}/#{id}.json").body, {:symbolize_names => true})
     
       build_authorization_hash(enotis_response)
     end
@@ -30,7 +28,7 @@ module EnotisPluggableAuth
     def get_users_by_role(role_name)
       case role_name
       when "System Administrator", :system_administrator
-        enotis_list_of_admins = JSON.parse(@@enotis_connection.get("#{CONFIG['admins']}.json").body, {:symbolize_names => true})
+        enotis_list_of_admins = JSON.parse(enotis_faraday_connection.get("#{CONFIG['admins']}.json").body, {:symbolize_names => true})
           
         authorization_array_response = []
         enotis_list_of_admins.each do |admin|
@@ -43,7 +41,7 @@ module EnotisPluggableAuth
     end
 
     def search_users(criteria)
-      enotis_response = JSON.parse(@@enotis_connection.get("#{CONFIG['search']}?#{criteria}").body, {:symbolize_names => true})
+      enotis_response = JSON.parse(enotis_faraday_connection.get("#{CONFIG['search']}?#{criteria}").body, {:symbolize_names => true})
     end
   
     private
@@ -53,8 +51,7 @@ module EnotisPluggableAuth
           :username         => enotis_response[:netid],
           :first_name       => enotis_response[:first_name],
           :last_name        => enotis_response[:last_name],
-          :email_address    => enotis_response[:email],
-          :account_end_date => (Date.today + 18250)           # 50 years in the future
+          :email_address    => enotis_response[:email]
         }
       
         auth_hash[:roles] = map_enotis_roles_to_psc_roles(enotis_response[:roles])
