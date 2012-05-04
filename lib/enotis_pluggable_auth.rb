@@ -69,10 +69,11 @@ module EnotisPluggableAuth
             :user_administrator => true,                                                # Add/edit users, can access the user administrator list
             :study_creator => {:sites => true},                                         # Can add studies
             :study_calendar_template_builder => {:sites => true, :studies => true},     # Can create/edit PSC templates
+            :subject_manager => {:sites => true},
             :study_subject_calendar_manager => {:sites => true, :studies => true}       # Can add/edit/change the segments that a subject is on
           }
         else
-          return { :study_subject_calendar_manager => { :sites => [CONFIG["site_name"]], :studies => roles_list }}
+          return { :subject_manager => {:sites => [CONFIG["site_name"]]}, :study_subject_calendar_manager => { :sites => [CONFIG["site_name"]], :studies => roles_list }}
         end
       end
   end
