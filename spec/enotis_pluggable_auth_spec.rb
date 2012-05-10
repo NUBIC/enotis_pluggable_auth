@@ -76,7 +76,7 @@ describe EnotisPluggableAuth::EnotisAuthority do
     $suite_authorization_source.stub!(:enotis_faraday_connection).and_return(@enotis_faraday_connection)
     $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_user))
     
-    $suite_authorization_source.get_user_by_id(1, nil).should == @psc_auth_hash_for_user
+    $suite_authorization_source.get_user_by_id(2, nil).should == @psc_auth_hash_for_user
   end
   
   it "should return a properly formatted hash for a user when requested by username" do

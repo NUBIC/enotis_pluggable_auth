@@ -45,18 +45,21 @@ module EnotisPluggableAuth
     private
       def get_user(username_or_id)
         cached_result = check_cache_for(username_or_id)
-        return cached_resule unless cached_result.nil?
-
+        
+        cached_result ? cached_result : get_and_cache_fresh_result_from_enotis(username_or_id)
+      end
+      
+      def get_and_cache_fresh_result_from_enotis(username_or_id)
         enotis_response = JSON.parse(enotis_faraday_connection.get("#{CONFIG['users']}/#{username_or_id}.json").body, {:symbolize_names => true})  
         auth_hash = build_authorization_hash(enotis_response)
+        
+        # Store both by username, and by id, so the cache can look it up by either value
         EnotisAuthority.set(auth_hash[:username], auth_hash)
         EnotisAuthority.set(auth_hash[:id], auth_hash)
-
-        auth_hash
       end
-    
+      
       def check_cache_for(username_or_id)
-        
+        EnotisAuthority.get(username_or_id)
       end
           
       def build_authorization_hash(enotis_response)
