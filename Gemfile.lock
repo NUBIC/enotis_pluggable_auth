@@ -6,6 +6,7 @@ PATH
       cachetastic (= 3.0.5.1)
       configatron (~> 2.3.2)
       faraday (~> 0.7.6)
+      jruby-openssl (~> 0.7.6.1)
       json (~> 1.6.6)
       memcache-client (~> 1.7.4)
 
@@ -14,6 +15,7 @@ GEM
   specs:
     activesupport (2.3.14)
     addressable (2.2.8)
+    bouncy-castle-java (1.5.0146.1)
     cachetastic (3.0.5.1)
       activesupport (>= 2.3.2)
       configatron (>= 2.3.2)
@@ -25,6 +27,8 @@ GEM
       addressable (~> 2.2)
       multipart-post (~> 1.1)
       rack (~> 1.1)
+    jruby-openssl (0.7.6.1)
+      bouncy-castle-java (>= 1.5.0146.1)
     json (1.6.7)
     memcache-client (1.7.8)
     multipart-post (1.1.5)
