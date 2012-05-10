@@ -4,9 +4,11 @@ require 'yaml'
 require 'rubygems'
 require 'json'
 require 'faraday'
+require 'cachetastic'
 
 module EnotisPluggableAuth
-  class EnotisAuthority
+  class EnotisAuthority < Cachetastic::Cache
+    configatron.cachetastic.defaults.default_expiry = 1200
     CONFIG = YAML.load_file("/etc/nubic/psc_enotis_pluggable_auth.yml")
   
     def enotis_faraday_connection
@@ -14,15 +16,11 @@ module EnotisPluggableAuth
     end
   
     def get_user_by_username(username, level)
-      enotis_response = JSON.parse(enotis_faraday_connection.get("#{CONFIG['users']}/#{username}.json").body, {:symbolize_names => true})
-    
-      build_authorization_hash(enotis_response)
+      get_user(username)
     end
 
     def get_user_by_id(id, level)
-      enotis_response = JSON.parse(enotis_faraday_connection.get("#{CONFIG['users']}/#{id}.json").body, {:symbolize_names => true})
-    
-      build_authorization_hash(enotis_response)
+      get_user(id)
     end
 
     def get_users_by_role(role_name)
@@ -45,6 +43,22 @@ module EnotisPluggableAuth
     end
   
     private
+      def get_user(username_or_id)
+        cached_result = check_cache_for(username_or_id)
+        return cached_resule unless cached_result.nil?
+
+        enotis_response = JSON.parse(enotis_faraday_connection.get("#{CONFIG['users']}/#{username_or_id}.json").body, {:symbolize_names => true})  
+        auth_hash = build_authorization_hash(enotis_response)
+        set(username, auth_hash)
+        set(auth_hash[:id], auth_hash)
+
+        auth_hash
+      end
+    
+      def check_cache_for(username_or_id)
+        
+      end
+          
       def build_authorization_hash(enotis_response)
         auth_hash = {
           :id               => enotis_response[:id],

@@ -1,3 +1,4 @@
 .DS_Store
 target/*
 enotis_pluggable_auth-*.gem
+log/*
