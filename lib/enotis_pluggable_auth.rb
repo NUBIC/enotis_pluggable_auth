@@ -9,6 +9,9 @@ require 'cachetastic'
 module EnotisPluggableAuth
   class EnotisAuthority < Cachetastic::Cache
     configatron.cachetastic.defaults.default_expiry = 1200
+    configatron.cachetastic.defaults.adapter = Cachetastic::Adapters::LocalMemory
+    configatron.cachetastic.defaults.logger = []
+    
     CONFIG = YAML.load_file("/etc/nubic/psc_enotis_pluggable_auth.yml")
   
     def enotis_faraday_connection
