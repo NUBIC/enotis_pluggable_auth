@@ -1,4 +1,4 @@
-require "enotis_pluggable_auth/version"
+require 'enotis_pluggable_auth/version'
 require 'date'
 require 'yaml'
 require 'rubygems'
@@ -49,8 +49,8 @@ module EnotisPluggableAuth
 
         enotis_response = JSON.parse(enotis_faraday_connection.get("#{CONFIG['users']}/#{username_or_id}.json").body, {:symbolize_names => true})  
         auth_hash = build_authorization_hash(enotis_response)
-        set(username, auth_hash)
-        set(auth_hash[:id], auth_hash)
+        EnotisAuthority.set(auth_hash[:username], auth_hash)
+        EnotisAuthority.set(auth_hash[:id], auth_hash)
 
         auth_hash
       end

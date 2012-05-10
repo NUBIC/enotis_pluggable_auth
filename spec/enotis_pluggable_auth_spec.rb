@@ -16,12 +16,12 @@ describe EnotisPluggableAuth::EnotisAuthority do
       :first_name => "Admin",
       :last_name => "Admin",
       :email_address => "admin@example.com",
-      :account_end_date => (Date.today + 18250),
       :roles => {
         :system_administrator => true,
         :user_administrator => true,
         :study_creator => {:sites => true},
         :study_calendar_template_builder => {:sites => true, :studies => true},
+        :subject_manager=>{:sites=>true},
         :study_subject_calendar_manager => {:sites => true, :studies => true}
       }
     }
@@ -35,8 +35,8 @@ describe EnotisPluggableAuth::EnotisAuthority do
       :first_name => "User",
       :last_name => "User",
       :email_address => "user@example.com",
-      :account_end_date => (Date.today + 18250),
       :roles => {
+        :subject_manager=>{:sites=>["northwestern"]},
         :study_subject_calendar_manager => { :sites=>[CONFIG['site_name']], :studies=>["STU00011111", "STU00022222", "STU000333333"] }
       }
     }
@@ -59,24 +59,28 @@ describe EnotisPluggableAuth::EnotisAuthority do
   end
   
   it "should return a properly formatted hash for an admin when requested by user id" do
+    $suite_authorization_source.stub!(:enotis_faraday_connection).and_return(@enotis_faraday_connection)
     $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_admin))
 
     $suite_authorization_source.get_user_by_id(1, nil).should == @psc_auth_hash_for_admin
   end
   
   it "should return a properly formatted hash for an admin when requested by username" do
+    $suite_authorization_source.stub!(:enotis_faraday_connection).and_return(@enotis_faraday_connection)
     $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_admin))
     
     $suite_authorization_source.get_user_by_username("adm123", nil).should == @psc_auth_hash_for_admin
   end
 
   it "should return a properly formatted hash for a user when requested by user id" do
+    $suite_authorization_source.stub!(:enotis_faraday_connection).and_return(@enotis_faraday_connection)
     $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_user))
     
     $suite_authorization_source.get_user_by_id(1, nil).should == @psc_auth_hash_for_user
   end
   
   it "should return a properly formatted hash for a user when requested by username" do
+    $suite_authorization_source.stub!(:enotis_faraday_connection).and_return(@enotis_faraday_connection)
     $suite_authorization_source.enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_user))
     
     $suite_authorization_source.get_user_by_username("usr123", nil).should == @psc_auth_hash_for_user
@@ -88,6 +92,7 @@ describe EnotisPluggableAuth::EnotisAuthority do
   
   it "should return an array of properly formatted hashes of admins when searching for users by the :system_administrator role" do 
     $suite_authorization_source.stub!(:enotis_faraday_connection).and_return(@enotis_faraday_connection)
+    @enotis_faraday_connection.stub!(:get).and_return(mock(Faraday::Response, :body => @enotis_response_for_all_admins))
 
     $suite_authorization_source.get_users_by_role(:system_administrator).should == @psc_auth_array_for_all_admins
   end

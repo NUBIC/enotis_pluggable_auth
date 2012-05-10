@@ -17,7 +17,10 @@ Gem::Specification.new do |gem|
   
   gem.add_dependency 'faraday', '~> 0.7.6'
   gem.add_dependency 'json', '~> 1.6.6'
-  gem.add_dependency 'jruby-openssl', '~> 0.7.6.1'
+  gem.add_dependency 'activesupport', '~> 2.3.2'
+  gem.add_dependency 'configatron', '~> 2.3.2'
+  gem.add_dependency 'memcache-client', '~> 1.7.4'
+#  gem.add_dependency 'jruby-openssl', '~> 0.7.6.1'
   gem.add_dependency 'cachetastic', '3.0.5.1'
 
   gem.add_development_dependency 'rspec', '~> 2.9'
