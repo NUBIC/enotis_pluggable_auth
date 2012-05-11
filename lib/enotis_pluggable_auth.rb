@@ -8,9 +8,13 @@ require 'cachetastic'
 
 module EnotisPluggableAuth
   class EnotisAuthority < Cachetastic::Cache
-    configatron.cachetastic.defaults.default_expiry = 1200
+    cache_log = Logger.new("logs/cachetastic.log") # must be specified, because the default log tries to write to a folder that doesn't exist
+    cache_log.level = Logger::ERROR
+    configatron.cachetastic.defaults.logger = [cache_log]
+    
+    configatron.cachetastic.defaults.default_expiry = 1200  # 20 minutes
     configatron.cachetastic.defaults.adapter = Cachetastic::Adapters::LocalMemory
-    configatron.cachetastic.defaults.logger = []
+    
     
     CONFIG = YAML.load_file("/etc/nubic/psc_enotis_pluggable_auth.yml")
   

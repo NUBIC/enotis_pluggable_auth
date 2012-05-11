@@ -2,3 +2,4 @@
 target/*
 enotis_pluggable_auth-*.gem
 log/*
+logs/*
